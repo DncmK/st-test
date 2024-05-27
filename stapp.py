@@ -1,7 +1,7 @@
 import folium
 import streamlit as st
 
-from streamlit_folium import st_folium
+from streamlit_folium import st_folium, folium_static
 
 # import pickle
 from pathlib import Path
@@ -63,7 +63,8 @@ if input_location == "Select On Map" or input_location == "Automatically":
 	).add_to(m)
 
 
-	st_data = st_folium(m, width=725, height=330)
+	# st_data = st_folium(m, width=725, height=330)
+	st_data = folium_static(m, width=725, height=330)
 
 input_type = st.selectbox("Type of use :", ['Residential', 'Industrial', 'Concentrated audience', 'Public Building', 'Emergency Buildig'], help="""Just a helping explanation of what is going to be on this input.""")
 
