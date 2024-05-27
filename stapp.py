@@ -63,7 +63,8 @@ if input_location == "Manually" or input_location == "Automatically":
 	).add_to(m)
 
 
-	st_data = st_folium(m, width=725, height=330)
+	# st_data = st_folium(m, width=725, height=330)
+	st_data = st_folium(m, width=725)
 
 input_type = st.selectbox("Type of use :", ['Residential', 'Industrial', 'Concentrated audience', 'Public Building', 'Emergency Buildig'], help="""Just a helping explanation of what is going to be on this input.""")
 
