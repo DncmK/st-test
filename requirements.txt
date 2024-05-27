@@ -1,2 +1,5 @@
 streamlit
-requests
+folium
+streamlit_folium
+pickle
+streamlit_authenticator
