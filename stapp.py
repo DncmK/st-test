@@ -107,6 +107,13 @@ input_construction_year = st.number_input("Year of construction :", 1920, 2024)
 
 input_previous_damages = st.selectbox("Previous damages in vertical elements :", ['No', 'Yes (Provide Photo)'], help="""Just a helping explanation of what is going to be on this input.""")
 
+if input_previous_damages == "Yes (Provide Photo)":
+	saved_setting7 = st.file_uploader("Upload previous settings (optional):", on_change=upload_setting_button,
+													  type='jpg',
+													  help='''If you have saved a "molecule_icon_settings.json" file, you can upload it 
+																 and use the same settings. You can save the settings with the button at the 
+																 end of the page''', key="7")
+
 input_danger = st.selectbox("Danger of impact with neighboring buildings :", ['No', 'Yes (Provide Photo)'], help="""Just a helping explanation of what is going to be on this input.""")
 
 if input_danger == "Yes (Provide Photo)":
