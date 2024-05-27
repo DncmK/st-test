@@ -45,7 +45,7 @@ List a building to be evaluated by our team.
 st.markdown("""
 		  <style>
 					.block-container {
-						  padding-top: 10rem;
+						  padding-top: 5rem;
 						  padding-bottom: 0rem;
 						  padding-left: 0rem;
 						  padding-right: 0rem;
@@ -54,17 +54,16 @@ st.markdown("""
 		  """, unsafe_allow_html=True)
 
 # select the input type
-input_location = st.selectbox("Select Location :", [' ', 'Manually', 'Automatically'], help="""Just a helping explanation of what is going to be on this input.""")
+# input_location = st.selectbox("Select Location :", [' ', 'Manually', 'Automatically'], help="""Just a helping explanation of what is going to be on this input.""")
 
-if input_location == "Manually" or input_location == "Automatically":
-	m = folium.Map(location=[40.257280, 22.510743], zoom_start=16)
-	folium.Marker(
-		[40.257280, 22.510743], popup="Liberty Bell", tooltip="Liberty Bell"
-	).add_to(m)
+# if input_location == "Manually" or input_location == "Automatically":
+m = folium.Map(location=[40.257280, 22.510743], zoom_start=16)
+folium.Marker(
+	[40.257280, 22.510743], popup="Liberty Bell", tooltip="Liberty Bell"
+).add_to(m)
 
 
-	st_data = st_folium(m, width=725, height=330)
-	# st_data = st_folium(m, width=725)
+st_data = st_folium(m, width=725, height=330)
 
 input_type = st.selectbox("Type of use :", ['Residential', 'Industrial', 'Concentrated audience', 'Public Building', 'Emergency Buildig'], help="""Just a helping explanation of what is going to be on this input.""")
 
