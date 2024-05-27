@@ -56,7 +56,8 @@ with st.container():
 with st.container():
     image_column, text_column = st.columns((1, 2))
     with image_column:
-        st.image(img_contact_form)
+        st.write("##")
+        # st.image(img_contact_form)
     with text_column:
         st.subheader("How To Add A Contact Form To Your Streamlit App")
         st.write(
