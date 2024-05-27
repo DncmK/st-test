@@ -3,7 +3,7 @@ import streamlit as st
 
 from streamlit_folium import st_folium
 
-import pickle
+# import pickle
 from pathlib import Path
 import streamlit_authenticator as stauth
 
