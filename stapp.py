@@ -1,19 +1,18 @@
 import folium
 import streamlit as st
-
 from streamlit_folium import st_folium, folium_static
-
 # import pickle
 from pathlib import Path
 import streamlit_authenticator as stauth
 
 # setting header, description and citation
-st.set_page_config(page_title="Buildings Evaluation!")
+# st.set_page_config(page_title="Buildings Evaluation!", layout="wide")
+st.set_page_config(page_title="Buildings Evaluation!", initial_sidebar_state="collapsed")
 
 # --- User Authentication ---
 names = ["Admin", "Dennis"]
-usernames = ["admin", "dennis"]
-passwords = ['abc123','abc456']
+usernames = ["admin", "test"]
+passwords = ['admin','test']
 
 credentials = {"usernames":{}}
 		  
@@ -26,6 +25,11 @@ for uname,name,pwd in zip(usernames,names,passwords):
 #    hashed_passwords = pickle.load(file)
 
 authenticator = stauth.Authenticate(credentials, "users_dashboard", "abcdef", cookie_expiry_days=0)
+
+name, authentication_status, username = authenticator.login("sidebar")
+
+# if st.sidebar.button("test"):
+# 	st.switch_page("pages/1_UserDashboard.py")
 
 def upload_setting_button():
 	 """Allow to upload setting"""
@@ -141,12 +145,12 @@ if input_sot_column == "Yes (Provide Photo)":
 																 and use the same settings. You can save the settings with the button at the 
 																 end of the page''', key="6")
 
-st.button("Send Data")
+# st.button("Send Data")
 
 
-
-# col1, col2, col3 = st.beta_columns(3)
-# col2.button('Send Data')
+st.write("")
+col1, col2, col3, col4, col5 = st.columns(5)
+col3.button('Send Data')
 
 
 
@@ -160,13 +164,14 @@ st.button("Send Data")
 # call to render Folium map in Streamlit
 # st_data = st_folium(m, width=725)
 
-name, authentication_status, username = authenticator.login("sidebar")
-
 if authentication_status == False:
-	st.error("Username/Password is incorrect!")
+	st.sidebar.error("Username/Password is incorrect!")
 
 # if authentication_status == None:
-#    st.warning("Please provide a username and a password!")
+#    st.sidebar.warning("Please provide a username and a password!")
 
 if authentication_status:
-	st.success("Thanks for logging in!")
+	authenticator.logout("Logout", "sidebar")
+	st.sidebar.success(f"Welcome {name}!")
+
+	st.switch_page("pages/1_UserDashboard.py")
