@@ -21,11 +21,11 @@ st.header("Latest Non-Reviewed Records")
 # df = pd.DataFrame(columns=['Address','age','color'])
 data = {
         'Address': [
-            '123 Main St, Springfield, IL',
-            '456 Elm St, Shelbyville, IL',
-            '789 Oak St, Capital City, IL',
-            '101 Maple St, Ogdenville, IL',
-            '202 Pine St, North Haverbrook, IL'
+            'Ζαλόγγου 35, Κατερίνη, GR',
+            'Μαρτίου 5, Κατερίνη, GR',
+            'Ειρήνης 20, Κατερίνη, GR',
+            'Οινόης 15, Κατερίνη, GR',
+            'Μεγάλου Αλεξάνδρου 58, Κατερίνη, GR'
         ]
     }
 
