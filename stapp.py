@@ -264,22 +264,28 @@ def review_listing(listing_id):
                 st.error(f"Error displaying image: {e}")
     c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'falling_photo',))
     listing_data_2 = c.fetchone()
-    display_image(listing_data_2[3], "Non-Structural Falling Danger Photo")
+    if listing_data_2[0] == 1:
+        display_image(listing_data_2[3], "Non-Structural Falling Danger Photo")
     c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'rust_photo',))
     listing_data_2 = c.fetchone()
-    display_image(listing_data[8], "Structure Condition Photo")
+    if listing_data_2[0] == 1:
+        display_image(listing_data_2[3], "Structure Condition Photo")
     c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'damage_photo',))
     listing_data_2 = c.fetchone()
-    display_image(listing_data[11], "Previous Damages Photo")
+    if listing_data_2[0] == 1:
+        display_image(listing_data_2[3], "Previous Damages Photo")
     c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'impact_photo',))
     listing_data_2 = c.fetchone()
-    display_image(listing_data[13], "Neighboring Buildings Impact Photo")
+    if listing_data_2[0] == 1:
+        display_image(listing_data_2[3], "Neighboring Buildings Impact Photo")
     c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'soft_floor_photo',))
     listing_data_2 = c.fetchone()
-    display_image(listing_data[15], "Soft Floor Photo")
+    if listing_data_2[0] == 1:
+        display_image(listing_data_2[3], "Soft Floor Photo")
     c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'short_column_photo',))
     listing_data_2 = c.fetchone()
-    display_image(listing_data[17], "Short Column Photo")
+    if listing_data_2[0] == 1:
+        display_image(listing_data_2[3], "Short Column Photo")
 
     # Additional Review Form
     st.subheader("Review Form")
