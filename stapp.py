@@ -262,27 +262,33 @@ def review_listing(listing_id):
                 st.image(image, caption=caption, use_column_width=True)
             except Exception as e:
                 st.error(f"Error displaying image: {e}")
-    c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'falling_photo',))
+    c.execute("SELECT EXISTS(SELECT 1 FROM survey_images WHERE survey_id = ? AND image_type = ? LIMIT 1)", (listing_id, 'falling_photo',))
+    # c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'falling_photo',))
     listing_data_2 = c.fetchone()
     if listing_data_2[0] == 1:
         display_image(listing_data_2[3], "Non-Structural Falling Danger Photo")
-    c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'rust_photo',))
+    c.execute("SELECT EXISTS(SELECT 1 FROM survey_images WHERE survey_id = ? AND image_type = ? LIMIT 1)", (listing_id, 'rust_photo',))
+    # c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'rust_photo',))
     listing_data_2 = c.fetchone()
     if listing_data_2[0] == 1:
         display_image(listing_data_2[3], "Structure Condition Photo")
-    c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'damage_photo',))
+    c.execute("SELECT EXISTS(SELECT 1 FROM survey_images WHERE survey_id = ? AND image_type = ? LIMIT 1)", (listing_id, 'damage_photo',))
+    # c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'damage_photo',))
     listing_data_2 = c.fetchone()
     if listing_data_2[0] == 1:
         display_image(listing_data_2[3], "Previous Damages Photo")
-    c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'impact_photo',))
+    c.execute("SELECT EXISTS(SELECT 1 FROM survey_images WHERE survey_id = ? AND image_type = ? LIMIT 1)", (listing_id, 'impact_photo',))
+    # c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'impact_photo',))
     listing_data_2 = c.fetchone()
     if listing_data_2[0] == 1:
         display_image(listing_data_2[3], "Neighboring Buildings Impact Photo")
-    c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'soft_floor_photo',))
+    c.execute("SELECT EXISTS(SELECT 1 FROM survey_images WHERE survey_id = ? AND image_type = ? LIMIT 1)", (listing_id, 'soft_floor_photo',))
+    # c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'soft_floor_photo',))
     listing_data_2 = c.fetchone()
     if listing_data_2[0] == 1:
         display_image(listing_data_2[3], "Soft Floor Photo")
-    c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'short_column_photo',))
+    c.execute("SELECT EXISTS(SELECT 1 FROM survey_images WHERE survey_id = ? AND image_type = ? LIMIT 1)", (listing_id, 'short_column_photo',))
+    # c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'short_column_photo',))
     listing_data_2 = c.fetchone()
     if listing_data_2[0] == 1:
         display_image(listing_data_2[3], "Short Column Photo")
