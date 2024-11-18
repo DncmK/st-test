@@ -116,7 +116,8 @@ def display_initial_form():
     # 2) Select the type of use
     st.header("2. Select the type of use")
     use_type = st.selectbox("Type of Use", ["Residential", "Industrial", "Concentrated Audience", 
-                                            "Public Building", "Emergency Building"])
+                                            "Public Building", "Emergency Building"],
+                             help="This is an explanatory help")
 
     # 3) Number of users
     st.header("3. Number of users")
