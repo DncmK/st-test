@@ -58,10 +58,27 @@ def resize_image(image):
     img_resized.save(buffered, format="JPEG")
     return buffered.getvalue()
 
-def initialize_map():
+# Function to initialize the map and handle location selection
+def initialize_map_with_marker():
+    # Initialize the map
     m = folium.Map(location=[38.0, 23.7], zoom_start=6)
     LocateControl(auto_start=True).add_to(m)
-    return m
+
+    # Retrieve user-selected location
+    location_data = st_folium(m, width=700, height=500)
+
+    # Check if a location has been clicked
+    lat, lon = None, None
+    if location_data.get("last_clicked"):
+        lat, lon = location_data["last_clicked"]["lat"], location_data["last_clicked"]["lng"]
+
+        # Add marker to the map
+        marker_map = folium.Map(location=[lat, lon], zoom_start=15)
+        folium.Marker([lat, lon], popup=f"Selected Location: {lat:.5f}, {lon:.5f}").add_to(marker_map)
+        st_folium(marker_map, width=700, height=500)
+
+    return lat, lon
+
 
 # Admin login
 def admin_login():
@@ -76,19 +93,15 @@ def admin_login():
         else:
             st.sidebar.error("Invalid username or password")
 
-# Display survey form for unregistered users
 def display_initial_form():
     st.title("Building Survey Form")
 
-    # Map for location selection
+    # Map for location selection with marker
     st.header("1. Select the location on the map")
-    m = initialize_map()
-    location = st_folium(m, width=700, height=300)
+    lat, lon = initialize_map_with_marker()
 
-    lat, lon = None, None
-    if location.get("last_clicked"):
-        lat, lon = location["last_clicked"]["lat"], location["last_clicked"]["lng"]
-        st.success(f"Selected Location: Latitude {lat}, Longitude {lon}")
+    if lat and lon:
+        st.success(f"Selected Location: Latitude {lat:.5f}, Longitude {lon:.5f}")
 
     # Other form fields
     type_of_use = st.selectbox("2. Type of Use", ["Residential", "Industrial", "Public Building"])
@@ -112,6 +125,7 @@ def display_initial_form():
             st.success("Survey submitted successfully!")
         else:
             st.error("Please fill all required fields and pass the CAPTCHA.")
+
 
 # Admin functionality to review listings
 def review_listings():
