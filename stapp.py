@@ -10,7 +10,7 @@ from folium.plugins import LocateControl
 conn = sqlite3.connect('building_survey.db')
 c = conn.cursor()
 
-# Create necessary tables
+# Ensure `survey_data` table includes the `reviewed` column
 c.execute('''CREATE TABLE IF NOT EXISTS survey_data (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 latitude REAL,
@@ -22,10 +22,17 @@ c.execute('''CREATE TABLE IF NOT EXISTS survey_data (
                 number_of_floors INTEGER,
                 condition_of_structure TEXT,
                 year_of_construction INTEGER,
-                previous_damages TEXT,
-                reviewed BOOLEAN DEFAULT FALSE
+                previous_damages TEXT
             )''')
 
+# Add the 'reviewed' column if it doesn't already exist
+c.execute("PRAGMA table_info(survey_data)")
+columns = [col[1] for col in c.fetchall()]
+if "reviewed" not in columns:
+    c.execute("ALTER TABLE survey_data ADD COLUMN reviewed BOOLEAN DEFAULT FALSE")
+    conn.commit()
+
+# Create the `review_data` table if it doesn't exist
 c.execute('''CREATE TABLE IF NOT EXISTS review_data (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 survey_id INTEGER,
@@ -41,6 +48,7 @@ c.execute('''CREATE TABLE IF NOT EXISTS review_data (
             )''')
 
 conn.commit()
+
 
 # Utility functions
 def resize_image(image):
