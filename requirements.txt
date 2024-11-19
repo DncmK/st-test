@@ -1,4 +1,7 @@
 streamlit
 folium
+Pillow
+pandas
+matplotlib
 streamlit_authenticator
 streamlit-folium
