@@ -10,7 +10,7 @@ from folium.plugins import LocateControl
 conn = sqlite3.connect('building_survey.db')
 c = conn.cursor()
 
-# Ensure `survey_data` table includes the `reviewed` column
+# Ensure `survey_data` has the correct schema
 c.execute('''CREATE TABLE IF NOT EXISTS survey_data (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 latitude REAL,
@@ -22,17 +22,11 @@ c.execute('''CREATE TABLE IF NOT EXISTS survey_data (
                 number_of_floors INTEGER,
                 condition_of_structure TEXT,
                 year_of_construction INTEGER,
-                previous_damages TEXT
+                previous_damages TEXT,
+                reviewed BOOLEAN DEFAULT FALSE
             )''')
 
-# Add the 'reviewed' column if it doesn't already exist
-c.execute("PRAGMA table_info(survey_data)")
-columns = [col[1] for col in c.fetchall()]
-if "reviewed" not in columns:
-    c.execute("ALTER TABLE survey_data ADD COLUMN reviewed BOOLEAN DEFAULT FALSE")
-    conn.commit()
-
-# Create the `review_data` table if it doesn't exist
+# Ensure `review_data` has the correct schema
 c.execute('''CREATE TABLE IF NOT EXISTS review_data (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 survey_id INTEGER,
@@ -43,11 +37,16 @@ c.execute('''CREATE TABLE IF NOT EXISTS review_data (
                 load_capacity_reduction TEXT,
                 structure_performance TEXT,
                 retrofitting_methods TEXT,
-                reviewed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY(survey_id) REFERENCES survey_data(id)
             )''')
 
-conn.commit()
+# Check and add missing `reviewed_at` column in `review_data`
+c.execute("PRAGMA table_info(review_data)")
+columns = [col[1] for col in c.fetchall()]
+if "reviewed_at" not in columns:
+    c.execute("ALTER TABLE review_data ADD COLUMN reviewed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    conn.commit()
+
 
 
 # Utility functions
