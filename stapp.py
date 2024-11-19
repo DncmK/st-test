@@ -121,58 +121,68 @@ def display_initial_form():
 
     # 3) Number of users
     st.header("3. Number of users")
-    num_users = st.selectbox("Number of Users", ["0-10", "11-100", "100+"])
+    num_users = st.selectbox("Number of Users", ["0-10", "11-100", "100+"],
+                             help="This is an explanatory help")
 
     # 4) Building importance category
     st.header("4. Building Importance Category")
-    importance_category = st.selectbox("Building Importance Category", ["Σ1", "Σ2", "Σ3", "Σ4"])
+    importance_category = st.selectbox("Building Importance Category", ["Σ1", "Σ2", "Σ3", "Σ4"],
+                             help="This is an explanatory help")
 
     # 5) Danger of non-structural element falling
     st.header("5. Danger of Non-Structural Element Falling")
-    danger_falling = st.selectbox("Danger of Non-Structural Element Falling", ["No", "Yes"])
+    danger_falling = st.selectbox("Danger of Non-Structural Element Falling", ["No", "Yes"],
+                             help="This is an explanatory help")
     falling_photo = None
     if danger_falling == "Yes":
         falling_photo = st.file_uploader("Upload photo of Non-Structural Element", type=["jpg", "png", "jpeg"])
     
     # 6) Number of floors
     st.header("6. Number of Floors")
-    num_floors = st.number_input("Number of Floors", min_value=1, max_value=100, step=1)
+    num_floors = st.number_input("Number of Floors", min_value=1, max_value=100, step=1,
+                             help="This is an explanatory help")
 
     # 7) Condition of structure
     st.header("7. Condition of Structure")
-    structure_condition = st.selectbox("Condition of Structure", ["No", "Rust/Spalling"])
+    structure_condition = st.selectbox("Condition of Structure", ["No", "Rust/Spalling"],
+                             help="This is an explanatory help")
     rust_photo = None
     if structure_condition == "Rust/Spalling":
         rust_photo = st.file_uploader("Upload photo of Rust/Spalling", type=["jpg", "png", "jpeg"])
     
     # 8) Year of construction
     st.header("8. Year of Construction")
-    year_construction = st.number_input("Year of Construction", min_value=1800, max_value=2024, step=1)
+    year_construction = st.number_input("Year of Construction", min_value=1800, max_value=2024, step=1,
+                             help="This is an explanatory help")
 
     # 9) Previous damages in vertical elements
     st.header("9. Previous Damages in Vertical Elements")
-    vertical_damage = st.selectbox("Previous Damages in Vertical Elements", ["No", "Yes"])
+    vertical_damage = st.selectbox("Previous Damages in Vertical Elements", ["No", "Yes"],
+                             help="This is an explanatory help")
     damage_photo = None
     if vertical_damage == "Yes":
         damage_photo = st.file_uploader("Upload photo of Vertical Element Damage", type=["jpg", "png", "jpeg"])
 
     # 10) Danger of impact with neighboring buildings
     st.header("10. Danger of Impact with Neighboring Buildings")
-    danger_impact = st.selectbox("Danger of Impact with Neighboring Buildings", ["No", "Yes"])
+    danger_impact = st.selectbox("Danger of Impact with Neighboring Buildings", ["No", "Yes"],
+                             help="This is an explanatory help")
     impact_photo = None
     if danger_impact == "Yes":
         impact_photo = st.file_uploader("Upload photo of Neighboring Building", type=["jpg", "png", "jpeg"])
 
     # 11) Soft floor (pilotis)
     st.header("11. Soft Floor (Pilotis)")
-    soft_floor = st.selectbox("Soft Floor (Pilotis)", ["No", "Yes"])
+    soft_floor = st.selectbox("Soft Floor (Pilotis)", ["No", "Yes"],
+                             help="This is an explanatory help")
     soft_floor_photo = None
     if soft_floor == "Yes":
         soft_floor_photo = st.file_uploader("Upload photo of Soft Floor (Pilotis)", type=["jpg", "png", "jpeg"])
 
     # 12) Short column
     st.header("12. Short Column")
-    short_column = st.selectbox("Short Column", ["No", "Yes"])
+    short_column = st.selectbox("Short Column", ["No", "Yes"],
+                             help="This is an explanatory help")
     short_column_photo = None
     if short_column == "Yes":
         short_column_photo = st.file_uploader("Upload photo of Short Column", type=["jpg", "png", "jpeg"])
