@@ -258,13 +258,7 @@ def display_initial_form():
     if st.button("Submit"):
         if captcha_correct:
             # Insert the data into the database
-            c.execute('''INSERT INTO survey_data (latitude, longitude, use_type, num_users, importance_category,
-                                                danger_falling, num_floors, structure_condition, year_construction,
-                                                vertical_damage, danger_impact, soft_floor, short_column)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
-                    (lat, lon, use_type, num_users, importance_category, danger_falling, num_floors,
-                    structure_condition, year_construction, vertical_damage, danger_impact,
-                    soft_floor, short_column))
+            c.execute('''INSERT INTO survey_data (latitude, longitude, use_type, num_users, importance_category, danger_falling, num_floors, structure_condition, year_construction, vertical_damage, danger_impact, soft_floor, short_column) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', (lat, lon, use_type, num_users, importance_category, danger_falling, num_floors, structure_condition, year_construction, vertical_damage, danger_impact, soft_floor, short_column))
             survey_id = c.lastrowid
 
             # Process and save images if they exist
