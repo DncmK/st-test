@@ -222,19 +222,25 @@ def display_initial_form():
         else:
             st.error("Incorrect CAPTCHA. Please try again.")
 
+def navigate_to(page_name):
+    st.session_state.current_page = page_name
+
 # Function to display non-reviewed listings for admin users
 def display_listings():
     st.title("Reviewed Listings")
+
+    if st.button("Go to Reviewed Listings"):
+        navigate_to("page_1")
     
-    c.execute("SELECT * FROM review_data")
-    listings = c.fetchall()
+    # c.execute("SELECT * FROM review_data")
+    # listings = c.fetchall()
     
-    if not listings:
-        st.info("No listings available.")
-        return
+    # if not listings:
+    #     st.info("No listings available.")
+    #     return
     
-    listing_options = [f"Listing {listing[0]} - Survey ID: ({listing[1]})" for listing in listings]
-    selected_listing = st.selectbox("Select a listing to preview", listing_options)
+    # listing_options = [f"Listing {listing[0]} - Survey ID: ({listing[1]})" for listing in listings]
+    # selected_listing = st.selectbox("Select a listing to preview", listing_options)
 
     st.title("Non-Reviewed Listings")
     
