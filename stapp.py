@@ -228,7 +228,7 @@ def display_listings():
     st.title("Reviewed Listings")
 
     if st.button("Go to Reviewed Listings"):
-        st.experimental_set_query_params(page="Page 1")
+        st.experimental_set_query_params(page="page_1")
     
     # c.execute("SELECT * FROM review_data")
     # listings = c.fetchall()
