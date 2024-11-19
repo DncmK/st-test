@@ -60,7 +60,66 @@ c.execute('''CREATE TABLE IF NOT EXISTS review_data (
                 reviewed BOOLEAN DEFAULT FALSE
             )''')
 
+# Create table for users if it doesn't exist
+c.execute('''CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT UNIQUE,
+                password TEXT
+            )''')
+
 conn.commit()
+
+# Function to visualize survey data
+def display_data_visualization():
+    st.title("Survey Data Visualization")
+
+    # Fetch the survey data
+    c.execute("SELECT type_of_use, COUNT(*) FROM survey_data GROUP BY type_of_use")
+    data = c.fetchall()
+    
+    if not data:
+        st.info("No survey data available for visualization.")
+        return
+
+    df = pd.DataFrame(data, columns=["Type of Use", "Count"])
+
+    # Create a bar chart
+    fig, ax = plt.subplots()
+    ax.bar(df["Type of Use"], df["Count"], color='skyblue')
+    ax.set_xlabel("Type of Use")
+    ax.set_ylabel("Number of Buildings")
+    ax.set_title("Number of Buildings by Type of Use")
+
+    st.pyplot(fig)
+
+# Function to handle user registration
+def register_user():
+    st.sidebar.title("User  Registration")
+    username = st.sidebar.text_input("Username")
+    password = st.sidebar.text_input("Password", type="password")
+    
+    if st.sidebar.button("Register"):
+        try:
+            c.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
+            conn.commit()
+            st.sidebar.success("User  registered successfully!")
+        except sqlite3.IntegrityError:
+            st.sidebar.error("Username already exists.")
+
+# Function to handle user login
+def user_login():
+    st.sidebar.title("User  Login")
+    username = st.sidebar.text_input("Username")
+    password = st.sidebar.text_input("Password", type="password")
+    
+    if st.sidebar.button("Login"):
+        c.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
+        user = c.fetchone()
+        if user:
+            st.session_state.logged_in = True
+            st.sidebar.success("Logged in successfully!")
+        else:
+            st.sidebar.error("Invalid username or password")
 
 # Function to resize an image
 def resize_image(image):
@@ -406,5 +465,6 @@ admin_login()
 # Only show listings if the user is logged in as admin
 if st.session_state.logged_in:
     display_listings()
+    display_data_visualization()
 else:
     display_initial_form()
