@@ -76,7 +76,7 @@ def display_data_visualization():
     st.title("Survey Data Visualization")
 
     # Fetch the survey data
-    c.execute("SELECT type_of_use, COUNT(*) FROM survey_data GROUP BY type_of_use")
+    c.execute("SELECT use_type, COUNT(*) FROM survey_data GROUP BY use_type")
     data = c.fetchall()
     
     if not data:
