@@ -462,9 +462,9 @@ def review_listing(listing_id):
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 
-# admin_login()
-register_user()
-user_login()
+admin_login()
+# register_user()
+# user_login()
 
 # Only show listings if the user is logged in as admin
 if st.session_state.logged_in:
