@@ -10,3 +10,7 @@ from folium.plugins import LocateControl
 # Initialize SQLite database
 conn = sqlite3.connect('building_survey.db')
 c = conn.cursor()
+
+st.title("Page 1")
+
+st.write("Welcome to Page 1!")
