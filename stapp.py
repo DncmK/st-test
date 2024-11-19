@@ -121,14 +121,20 @@ def review_listings():
     review_filter = st.radio("Show Listings", ["Non-Reviewed", "Reviewed"])
     reviewed = review_filter == "Reviewed"
 
-    if not reviewed:
-        c.execute("SELECT * FROM survey_data WHERE reviewed = 0")
-    else:
-        c.execute('''
-            SELECT s.*, r.reviewed_at FROM survey_data s
-            INNER JOIN review_data r ON s.id = r.survey_id
-        ''')
-    listings = c.fetchall()
+    try:
+        # Fetch non-reviewed or reviewed listings
+        if not reviewed:
+            c.execute("SELECT * FROM survey_data WHERE reviewed = 0")
+        else:
+            c.execute('''
+                SELECT s.*, r.reviewed_at 
+                FROM survey_data s
+                INNER JOIN review_data r ON s.id = r.survey_id
+            ''')
+        listings = c.fetchall()
+    except sqlite3.OperationalError as e:
+        st.error(f"Database error: {e}")
+        return
 
     if not listings:
         st.info(f"No {'reviewed' if reviewed else 'non-reviewed'} listings available.")
