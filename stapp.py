@@ -160,6 +160,7 @@ def display_initial_form():
     if location:
         # if location['last_clicked']['lat'] != None and location['last_clicked']['lng'] != None:
         # try:
+        lat, lon = location['lat'], location['lng']
         if location.get("last_clicked"):
             lat, lon = location['last_clicked']['lat'], location['last_clicked']['lng']
             # location.add_child(folium.ClickForMarker())
