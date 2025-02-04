@@ -155,13 +155,13 @@ def display_initial_form():
     # folium.plugins.LocateControl().add_to(map)
     folium.plugins.LocateControl(auto_start=True).add_to(map)
     # print(folium.plugins.LocateControl())
-    autoloc = folium.plugins.LocateControl()
+    # autoloc = folium.plugins.LocateControl()
     location = st_folium(map, width=700, height=300)
     
     if location:
         # if location['last_clicked']['lat'] != None and location['last_clicked']['lng'] != None:
         # try:
-        lat, lon = autoloc['lat'], autoloc['lng']
+        # lat, lon = autoloc['lat'], autoloc['lng']
         if location.get("last_clicked"):
             lat, lon = location['last_clicked']['lat'], location['last_clicked']['lng']
             # location.add_child(folium.ClickForMarker())
