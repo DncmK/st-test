@@ -295,15 +295,15 @@ def display_initial_form():
         else:
             st.error("Incorrect CAPTCHA. Please try again.")
 
-def page_1():
-    st.title("Page 1")
-    st.write("This is Page 1.")
+# def page_1():
+#     st.title("Page 1")
+#     st.write("This is Page 1.")
 # Function to display non-reviewed listings for admin users
 def display_listings():
-    st.title("Reviewed Listings")
+    # st.title("Reviewed Listings")
 
-    if st.button("Go to Reviewed Listings"):
-        page_1()
+    # if st.button("Go to Reviewed Listings"):
+    #     page_1()
         # st.query_params(page="page_1")
         # st.session_state.page = "Page 1"
     
