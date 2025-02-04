@@ -342,7 +342,7 @@ def display_listings():
 #         if data:  # Check if there is binary data
 #             try:
 #                 image = Image.open(io.BytesIO(data))
-#                 st.image(image, caption=caption, use_column_width=True)
+#                 st.image(image, caption=caption, use_container_width=True)
 #             except Exception as e:
 #                 st.error(f"Error displaying image: {e}")
 #     c.execute("SELECT EXISTS(SELECT 1 FROM survey_images WHERE survey_id = ? AND image_type = ? LIMIT 1)", (listing_id, 'falling_photo',))
@@ -417,7 +417,7 @@ def review_listing(listing_id):
         c.execute("SELECT image FROM survey_images WHERE survey_id = ? AND image_type = 'falling_photo'", (listing_id,))
         falling_photo = c.fetchone()
         if falling_photo:
-            st.image(falling_photo[0], caption="Non-Structural Element Falling", use_column_width=True)
+            st.image(falling_photo[0], caption="Non-Structural Element Falling", use_container_width=True)
 
     num_floors = st.number_input("Number of Floors", min_value=1, max_value=100, step=1, value=listing_data[7])
     structure_condition = st.selectbox("Condition of Structure", ["No", "Rust/Spalling"], index=["No", "Rust/Spalling"].index(listing_data[8]))
@@ -427,7 +427,7 @@ def review_listing(listing_id):
         c.execute("SELECT image FROM survey_images WHERE survey_id = ? AND image_type = 'rust_photo'", (listing_id,))
         rust_photo = c.fetchone()
         if rust_photo:
-            st.image(rust_photo[0], caption="Rust/Spalling Condition", use_column_width=True)
+            st.image(rust_photo[0], caption="Rust/Spalling Condition", use_container_width=True)
 
     year_construction = st.number_input("Year of Construction", min_value=1800, max_value=2024, step=1, value=listing_data[9])
     vertical_damage = st.selectbox("Previous Damages in Vertical Elements", ["No", "Yes"], index=["No", "Yes"].index(listing_data[10]))
@@ -437,7 +437,7 @@ def review_listing(listing_id):
         c.execute("SELECT image FROM survey_images WHERE survey_id = ? AND image_type = 'damage_photo'", (listing_id,))
         damage_photo = c.fetchone()
         if damage_photo:
-            st.image(damage_photo[0], caption="Vertical Element Damage", use_column_width=True)
+            st.image(damage_photo[0], caption="Vertical Element Damage", use_container_width=True)
 
     danger_impact = st.selectbox("Danger of Impact with Neighboring Buildings", ["No", "Yes"], index=["No", "Yes"].index(listing_data[11]))
 
@@ -446,7 +446,7 @@ def review_listing(listing_id):
         c.execute("SELECT image FROM survey_images WHERE survey_id = ? AND image_type = 'impact_photo'", (listing_id,))
         impact_photo = c.fetchone()
         if impact_photo:
-            st.image(impact_photo[0], caption="Impact with Neighboring Building", use_column_width=True)
+            st.image(impact_photo[0], caption="Impact with Neighboring Building", use_container_width=True)
 
     soft_floor = st.selectbox("Soft Floor (Pilotis)", ["No", "Yes"], index=["No", "Yes"].index(listing_data[12]))
 
@@ -455,7 +455,7 @@ def review_listing(listing_id):
         c.execute("SELECT image FROM survey_images WHERE survey_id = ? AND image_type = 'soft_floor_photo'", (listing_id,))
         soft_floor_photo = c.fetchone()
         if soft_floor_photo:
-            st.image(soft_floor_photo[0], caption="Soft Floor (Pilotis)", use_column_width=True)
+            st.image(soft_floor_photo[0], caption="Soft Floor (Pilotis)", use_container_width=True)
 
     short_column = st.selectbox("Short Column", ["No", "Yes"], index=["No", "Yes"].index(listing_data[13]))
 
@@ -464,7 +464,7 @@ def review_listing(listing_id):
         c.execute("SELECT image FROM survey_images WHERE survey_id = ? AND image_type = 'short_column_photo'", (listing_id,))
         short_column_photo = c.fetchone()
         if short_column_photo:
-            st.image(short_column_photo[0], caption="Short Column", use_column_width=True)
+            st.image(short_column_photo[0], caption="Short Column", use_container_width=True)
 
     if st.button("Submit Changes"):
         # Update the survey_data with the modified data
