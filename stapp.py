@@ -239,6 +239,8 @@ def display_initial_form():
                              help="This is an explanatory help")
     damage_photo = None
     if vertical_damage == "Yes":
+        max_crack = st.slider("Maximum Crack Width in mm (Approximately)", min_value=1, max_value=20)
+    if vertical_damage == "Yes":
         damage_photo = st.file_uploader("Upload photo of Vertical Element Damage", type=["jpg", "png", "jpeg"])
         # damage_photo = st.file_uploader("Upload photo of Vertical Element Damage", type=["jpg", "png", "jpeg"], accept_multiple_files=True)
 
