@@ -391,11 +391,19 @@ def review_listing(listing_id):
     # Display the initial form data
     st.subheader("Initial Form Data")
 
-    # Show the location on a map based on latitude and longitude
-    st.map(data=pd.DataFrame({
-        'lat': [listing_data[1]],
-        'lon': [listing_data[2]],
-    }))
+    # Display location on map
+    latitude = listing_data[1]
+    longitude = listing_data[2]
+    st.write("**Location:**", f"Latitude: {latitude}, Longitude: {longitude}")
+    m = folium.Map(location=[latitude, longitude], zoom_start=16)
+    folium.Marker([latitude, longitude], popup="Building Location").add_to(m)
+    st_folium(m, width=700)
+
+    # # Show the location on a map based on latitude and longitude
+    # st.map(data=pd.DataFrame({
+    #     'lat': [listing_data[1]],
+    #     'lon': [listing_data[2]],
+    # }))
 
     use_type = st.selectbox("Type of Use", ["Residential", "Industrial", "Concentrated Audience", "Public Building", "Emergency Building"], index=["Residential", "Industrial", "Concentrated Audience", "Public Building", "Emergency Building"].index(listing_data[3]))
     num_users = st.selectbox("Number of Users", ["0-10", "11-100", "100+"], index=["0-10", "11-100", "100+"].index(listing_data[4]))
