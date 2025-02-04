@@ -206,7 +206,7 @@ def display_initial_form():
                              help="This is an explanatory help")
     falling_photo = None
     if danger_falling == "Yes":
-        falling_photo = st.file_uploader("Upload photo of Non-Structural Element", type=["jpg", "png", "jpeg"])
+        falling_photo = st.file_uploader("Upload photo of Non-Structural Element", type=["jpg", "png", "jpeg"], accept_multiple_files=True)
     
     # 6) Number of floors
     st.header("6. Number of Floors")
@@ -219,7 +219,7 @@ def display_initial_form():
                              help="This is an explanatory help")
     rust_photo = None
     if structure_condition == "Rust/Spalling":
-        rust_photo = st.file_uploader("Upload photo of Rust/Spalling", type=["jpg", "png", "jpeg"])
+        rust_photo = st.file_uploader("Upload photo of Rust/Spalling", type=["jpg", "png", "jpeg"], accept_multiple_files=True)
     
     # 8) Year of construction
     st.header("8. Year of Construction")
@@ -232,7 +232,7 @@ def display_initial_form():
                              help="This is an explanatory help")
     damage_photo = None
     if vertical_damage == "Yes":
-        damage_photo = st.file_uploader("Upload photo of Vertical Element Damage", type=["jpg", "png", "jpeg"])
+        damage_photo = st.file_uploader("Upload photo of Vertical Element Damage", type=["jpg", "png", "jpeg"], accept_multiple_files=True)
 
     # 10) Danger of impact with neighboring buildings
     st.header("10. Danger of Impact with Neighboring Buildings")
@@ -240,7 +240,7 @@ def display_initial_form():
                              help="This is an explanatory help")
     impact_photo = None
     if danger_impact == "Yes":
-        impact_photo = st.file_uploader("Upload photo of Neighboring Building", type=["jpg", "png", "jpeg"])
+        impact_photo = st.file_uploader("Upload photo of Neighboring Building", type=["jpg", "png", "jpeg"], accept_multiple_files=True)
 
     # 11) Soft floor (pilotis)
     st.header("11. Soft Floor (Pilotis)")
@@ -248,7 +248,7 @@ def display_initial_form():
                              help="This is an explanatory help")
     soft_floor_photo = None
     if soft_floor == "Yes":
-        soft_floor_photo = st.file_uploader("Upload photo of Soft Floor (Pilotis)", type=["jpg", "png", "jpeg"])
+        soft_floor_photo = st.file_uploader("Upload photo of Soft Floor (Pilotis)", type=["jpg", "png", "jpeg"], accept_multiple_files=True)
 
     # 12) Short column
     st.header("12. Short Column")
@@ -256,7 +256,7 @@ def display_initial_form():
                              help="This is an explanatory help")
     short_column_photo = None
     if short_column == "Yes":
-        short_column_photo = st.file_uploader("Upload photo of Short Column", type=["jpg", "png", "jpeg"])
+        short_column_photo = st.file_uploader("Upload photo of Short Column", type=["jpg", "png", "jpeg"], accept_multiple_files=True)
 
     # CAPTCHA implementation
     st.header("CAPTCHA Verification")
