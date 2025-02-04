@@ -162,7 +162,10 @@ def display_initial_form():
         # if location['last_clicked']['lat'] != None and location['last_clicked']['lng'] != None:
         # try:
         # lat, lon = autoloc['lat'], autoloc['lng']
-        if location.get("last_clicked"):
+        if location.get("last_circle_radius"):
+            lat, lon = location['last_circle_radius']['lat'], location['last_circle_radius']['lng']
+            st.success(f"Selected Location: Latitude {lat}, Longitude {lon}")
+        elif location.get("last_clicked"):
             lat, lon = location['last_clicked']['lat'], location['last_clicked']['lng']
             # location.add_child(folium.ClickForMarker())
             # fg = folium.FeatureGroup(name="State bounds")
