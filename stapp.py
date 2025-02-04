@@ -150,7 +150,7 @@ def display_initial_form():
     st.title("Building Survey Form")
 
     # 1) Select location on the map
-    st.header("1. Select the location on the map")
+    st.header("1. Click on the map to select the location.")
     map = folium.Map(location=[38.0, 23.7], zoom_start=6)
     # folium.plugins.LocateControl().add_to(map)
     folium.plugins.LocateControl(auto_start=True).add_to(map)
@@ -161,11 +161,11 @@ def display_initial_form():
     if location:
         # if location['last_clicked']['lat'] != None and location['last_clicked']['lng'] != None:
         # try:
-        # lat, lon = autoloc['lat'], autoloc['lng']
-        if location.get("last_circle_radius"):
-            lat, lon = location['last_circle_radius']['lat'], location['last_circle_radius']['lng']
-            st.success(f"Selected Location: Latitude {lat}, Longitude {lon}")
-        elif location.get("last_clicked"):
+        # if location.get("last_circle_radius"):
+        #     lat, lon = location['last_circle_radius']['lat'], location['last_circle_radius']['lng']
+        #     st.success(f"Selected Location: Latitude {lat}, Longitude {lon}")
+        # elif location.get("last_clicked"):
+        if location.get("last_clicked"):
             lat, lon = location['last_clicked']['lat'], location['last_clicked']['lng']
             # location.add_child(folium.ClickForMarker())
             # fg = folium.FeatureGroup(name="State bounds")
@@ -176,7 +176,11 @@ def display_initial_form():
             #                 width=1200,
             #                 height=500,
             #             )
-            st.success(f"Selected Location: Latitude {lat}, Longitude {lon}")
+            # st.success(f"Selected Location: Latitude {lat}, Longitude {lon}")
+            st.success(f"Location Selected Succesfully!")
+        else:
+            lat = None
+            lon = None
         # except Exception:
         #     pass
     
@@ -263,23 +267,25 @@ def display_initial_form():
     # if st.button("Submit") and captcha_correct:
     if st.button("Submit"):
         if captcha_correct:
-            # Insert the data into the database
-            c.execute('''INSERT INTO survey_data (latitude, longitude, use_type, num_users, importance_category, danger_falling, num_floors, structure_condition, year_construction, vertical_damage, danger_impact, soft_floor, short_column) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', (lat, lon, use_type, num_users, importance_category, danger_falling, num_floors, structure_condition, year_construction, vertical_damage, danger_impact, soft_floor, short_column))
-            survey_id = c.lastrowid
+            if lat != None and lon != None:
+                # Insert the data into the database
+                c.execute('''INSERT INTO survey_data (latitude, longitude, use_type, num_users, importance_category, danger_falling, num_floors, structure_condition, year_construction, vertical_damage, danger_impact, soft_floor, short_column) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', (lat, lon, use_type, num_users, importance_category, danger_falling, num_floors, structure_condition, year_construction, vertical_damage, danger_impact, soft_floor, short_column))
+                survey_id = c.lastrowid
 
-            # Process and save images if they exist
-            image_types = ["falling_photo", "rust_photo", "damage_photo", "impact_photo", "soft_floor_photo", "short_column_photo"]
-            images = [falling_photo, rust_photo, damage_photo, impact_photo, soft_floor_photo, short_column_photo]
+                # Process and save images if they exist
+                image_types = ["falling_photo", "rust_photo", "damage_photo", "impact_photo", "soft_floor_photo", "short_column_photo"]
+                images = [falling_photo, rust_photo, damage_photo, impact_photo, soft_floor_photo, short_column_photo]
 
-            for img_type, img in zip(image_types, images):
-                if img is not None:
-                    resized_image = resize_image(img)
-                    c.execute('''INSERT INTO survey_images (survey_id, image_type, image)
-                                VALUES (?, ?, ?)''', (survey_id, img_type, resized_image))
+                for img_type, img in zip(image_types, images):
+                    if img is not None:
+                        resized_image = resize_image(img)
+                        c.execute('''INSERT INTO survey_images (survey_id, image_type, image)
+                                    VALUES (?, ?, ?)''', (survey_id, img_type, resized_image))
 
-            conn.commit()
-            st.success("Form submitted successfully!")
-        # elif not captcha_correct:
+                conn.commit()
+                st.success("Form submitted successfully!")
+            else:
+                st.error("Please click on the map to select location!")
         else:
             st.error("Incorrect CAPTCHA. Please try again.")
 
