@@ -11,6 +11,6 @@ from folium.plugins import LocateControl
 conn = sqlite3.connect('building_survey.db')
 c = conn.cursor()
 
-st.title("Page 1")
+st.title("Reviewed Listings")
 
-st.write("Welcome to Page 1!")
+st.write("Select a listing from the list.")
