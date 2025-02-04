@@ -7,6 +7,7 @@ import io
 from folium.plugins import LocateControl
 import pandas as pd
 import matplotlib.pyplot as plt
+import random
 
 
 # Initialize SQLite database
@@ -70,6 +71,9 @@ c.execute('''CREATE TABLE IF NOT EXISTS users (
             )''')
 
 conn.commit()
+
+def generate_captcha():
+    return random.randint(1000, 9999)
 
 # Function to visualize survey data
 def display_data_visualization():
@@ -148,6 +152,7 @@ def admin_login():
 # Function to display the initial form for non-registered users
 def display_initial_form():
     st.title("Building Survey Form")
+    captcha_ran = generate_captcha()
 
     # 1) Select location on the map
     st.header("1. Click on the map to select the location.")
@@ -216,11 +221,11 @@ def display_initial_form():
 
     # 7) Condition of structure
     st.header("7. Condition of Structure")
-    structure_condition = st.selectbox("Condition of Structure", ["No", "Rust/Spalling"],
+    structure_condition = st.selectbox("Condition of Structure", ["No", "Corrosion/Spalling"],
                              help="This is an explanatory help")
     rust_photo = None
-    if structure_condition == "Rust/Spalling":
-        rust_photo = st.file_uploader("Upload photo of Rust/Spalling", type=["jpg", "png", "jpeg"])
+    if structure_condition == "Corrosion/Spalling":
+        rust_photo = st.file_uploader("Upload photo of Corrosion/Spalling", type=["jpg", "png", "jpeg"])
         # rust_photo = st.file_uploader("Upload photo of Rust/Spalling", type=["jpg", "png", "jpeg"], accept_multiple_files=True)
     
     # 8) Year of construction
@@ -267,7 +272,8 @@ def display_initial_form():
     # CAPTCHA implementation
     st.header("CAPTCHA Verification")
     captcha_input = st.text_input("Enter CAPTCHA (type '12345')")
-    captcha_correct = captcha_input == "12345"
+    # captcha_correct = captcha_input == "12345"
+    captcha_correct = captcha_ran
 
     # Submission button
     # if st.button("Submit") and captcha_correct:
@@ -441,14 +447,14 @@ def review_listing(listing_id):
             st.image(falling_photo[0], caption="Non-Structural Element Falling", use_container_width=True)
 
     num_floors = st.number_input("Number of Floors", min_value=1, max_value=100, step=1, value=listing_data[7])
-    structure_condition = st.selectbox("Condition of Structure", ["No", "Rust/Spalling"], index=["No", "Rust/Spalling"].index(listing_data[8]))
+    structure_condition = st.selectbox("Condition of Structure", ["No", "Corrosion/Spalling"], index=["No", "Corrosion/Spalling"].index(listing_data[8]))
 
     # Show the existing photo if provided for structure condition
-    if structure_condition == "Rust/Spalling":
+    if structure_condition == "Corrosion/Spalling":
         c.execute("SELECT image FROM survey_images WHERE survey_id = ? AND image_type = 'rust_photo'", (listing_id,))
         rust_photo = c.fetchone()
         if rust_photo:
-            st.image(rust_photo[0], caption="Rust/Spalling Condition", use_container_width=True)
+            st.image(rust_photo[0], caption="Corrosion/Spalling Condition", use_container_width=True)
 
     year_construction = st.number_input("Year of Construction", min_value=1800, max_value=2024, step=1, value=listing_data[9])
     vertical_damage = st.selectbox("Previous Damages in Vertical Elements", ["No", "Yes"], index=["No", "Yes"].index(listing_data[10]))
