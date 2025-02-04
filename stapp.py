@@ -110,7 +110,7 @@ def register_user():
 
 # Function to handle user login
 def user_login():
-    st.sidebar.title("User  Login")
+    st.sidebar.title("User Login")
     username = st.sidebar.text_input("Username")
     password = st.sidebar.text_input("Password", type="password")
     
@@ -118,7 +118,8 @@ def user_login():
         c.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
         user = c.fetchone()
         if user:
-            st.session_state.logged_in = True
+            st.session_state.logged_in = True  # Ensure session state is set correctly
+            st.session_state.username = username  # Save the username to session
             st.sidebar.success("Logged in successfully!")
         else:
             st.sidebar.error("Invalid username or password")
@@ -310,77 +311,156 @@ def display_listings():
     selected_listing_id = listings[listing_options.index(selected_listing)][0]
     review_listing(selected_listing_id)
 
-# Function to review a selected listing for admin users
-def review_listing(listing_id):
-    st.header(f"Reviewing Listing ID: {listing_id}")
+# # Function to review a selected listing for admin users
+# def review_listing(listing_id):
+#     st.header(f"Reviewing Listing ID: {listing_id}")
     
-    # Fetch the listing data
-    c.execute("SELECT * FROM survey_data WHERE id = ?", (listing_id,))
-    listing_data = c.fetchone()
+#     # Fetch the listing data
+#     c.execute("SELECT * FROM survey_data WHERE id = ?", (listing_id,))
+#     listing_data = c.fetchone()
 
-    # Display the listing data
-    st.subheader("Listing Data")
+#     # Display the listing data
+#     st.subheader("Listing Data")
 
-    # Display location on map
-    latitude = listing_data[1]
-    longitude = listing_data[2]
-    st.write("**Location:**", f"Latitude: {latitude}, Longitude: {longitude}")
-    m = folium.Map(location=[latitude, longitude], zoom_start=16)
-    folium.Marker([latitude, longitude], popup="Building Location").add_to(m)
-    st_folium(m, width=700)
+#     # Display location on map
+#     latitude = listing_data[1]
+#     longitude = listing_data[2]
+#     st.write("**Location:**", f"Latitude: {latitude}, Longitude: {longitude}")
+#     m = folium.Map(location=[latitude, longitude], zoom_start=16)
+#     folium.Marker([latitude, longitude], popup="Building Location").add_to(m)
+#     st_folium(m, width=700)
 
-    # Display the other listing details
-    st.write("**Type of Use:**", listing_data[3])
-    st.write("**Number of Users:**", listing_data[4])
-    st.write("**Building Importance Category:**", listing_data[5])
-    st.write("**Number of Floors:**", listing_data[7])
-    st.write("**Year of Construction:**", listing_data[9])
+#     # Display the other listing details
+#     st.write("**Type of Use:**", listing_data[3])
+#     st.write("**Number of Users:**", listing_data[4])
+#     st.write("**Building Importance Category:**", listing_data[5])
+#     st.write("**Number of Floors:**", listing_data[7])
+#     st.write("**Year of Construction:**", listing_data[9])
 
-    # Display images if available (convert binary data back to an image)
-    def display_image(data, caption):
-        if data:  # Check if there is binary data
-            try:
-                image = Image.open(io.BytesIO(data))
-                st.image(image, caption=caption, use_column_width=True)
-            except Exception as e:
-                st.error(f"Error displaying image: {e}")
-    c.execute("SELECT EXISTS(SELECT 1 FROM survey_images WHERE survey_id = ? AND image_type = ? LIMIT 1)", (listing_id, 'falling_photo',))
-    listing_data_2 = c.fetchone()
-    if listing_data_2[0] == 1:
-        c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'falling_photo',))
-        listing_data_2 = c.fetchone()
-        display_image(listing_data_2[3], "Non-Structural Falling Danger Photo")
-    c.execute("SELECT EXISTS(SELECT 1 FROM survey_images WHERE survey_id = ? AND image_type = ? LIMIT 1)", (listing_id, 'rust_photo',))
-    listing_data_2 = c.fetchone()
-    if listing_data_2[0] == 1:
-        c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'rust_photo',))
-        listing_data_2 = c.fetchone()
-        display_image(listing_data_2[3], "Structure Condition Photo")
-    c.execute("SELECT EXISTS(SELECT 1 FROM survey_images WHERE survey_id = ? AND image_type = ? LIMIT 1)", (listing_id, 'damage_photo',))
-    listing_data_2 = c.fetchone()
-    if listing_data_2[0] == 1:
-        c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'damage_photo',))
-        listing_data_2 = c.fetchone()
-        display_image(listing_data_2[3], "Previous Damages Photo")
-    c.execute("SELECT EXISTS(SELECT 1 FROM survey_images WHERE survey_id = ? AND image_type = ? LIMIT 1)", (listing_id, 'impact_photo',))
-    listing_data_2 = c.fetchone()
-    if listing_data_2[0] == 1:
-        c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'impact_photo',))
-        listing_data_2 = c.fetchone()
-        display_image(listing_data_2[3], "Neighboring Buildings Impact Photo")
-    c.execute("SELECT EXISTS(SELECT 1 FROM survey_images WHERE survey_id = ? AND image_type = ? LIMIT 1)", (listing_id, 'soft_floor_photo',))
-    listing_data_2 = c.fetchone()
-    if listing_data_2[0] == 1:
-        c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'soft_floor_photo',))
-        listing_data_2 = c.fetchone()
-        display_image(listing_data_2[3], "Soft Floor Photo")
-    c.execute("SELECT EXISTS(SELECT 1 FROM survey_images WHERE survey_id = ? AND image_type = ? LIMIT 1)", (listing_id, 'short_column_photo',))
-    listing_data_2 = c.fetchone()
-    if listing_data_2[0] == 1:
-        c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'short_column_photo',))
-        listing_data_2 = c.fetchone()
-        display_image(listing_data_2[3], "Short Column Photo")
+#     # Display images if available (convert binary data back to an image)
+#     def display_image(data, caption):
+#         if data:  # Check if there is binary data
+#             try:
+#                 image = Image.open(io.BytesIO(data))
+#                 st.image(image, caption=caption, use_column_width=True)
+#             except Exception as e:
+#                 st.error(f"Error displaying image: {e}")
+#     c.execute("SELECT EXISTS(SELECT 1 FROM survey_images WHERE survey_id = ? AND image_type = ? LIMIT 1)", (listing_id, 'falling_photo',))
+#     listing_data_2 = c.fetchone()
+#     if listing_data_2[0] == 1:
+#         c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'falling_photo',))
+#         listing_data_2 = c.fetchone()
+#         display_image(listing_data_2[3], "Non-Structural Falling Danger Photo")
+#     c.execute("SELECT EXISTS(SELECT 1 FROM survey_images WHERE survey_id = ? AND image_type = ? LIMIT 1)", (listing_id, 'rust_photo',))
+#     listing_data_2 = c.fetchone()
+#     if listing_data_2[0] == 1:
+#         c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'rust_photo',))
+#         listing_data_2 = c.fetchone()
+#         display_image(listing_data_2[3], "Structure Condition Photo")
+#     c.execute("SELECT EXISTS(SELECT 1 FROM survey_images WHERE survey_id = ? AND image_type = ? LIMIT 1)", (listing_id, 'damage_photo',))
+#     listing_data_2 = c.fetchone()
+#     if listing_data_2[0] == 1:
+#         c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'damage_photo',))
+#         listing_data_2 = c.fetchone()
+#         display_image(listing_data_2[3], "Previous Damages Photo")
+#     c.execute("SELECT EXISTS(SELECT 1 FROM survey_images WHERE survey_id = ? AND image_type = ? LIMIT 1)", (listing_id, 'impact_photo',))
+#     listing_data_2 = c.fetchone()
+#     if listing_data_2[0] == 1:
+#         c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'impact_photo',))
+#         listing_data_2 = c.fetchone()
+#         display_image(listing_data_2[3], "Neighboring Buildings Impact Photo")
+#     c.execute("SELECT EXISTS(SELECT 1 FROM survey_images WHERE survey_id = ? AND image_type = ? LIMIT 1)", (listing_id, 'soft_floor_photo',))
+#     listing_data_2 = c.fetchone()
+#     if listing_data_2[0] == 1:
+#         c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'soft_floor_photo',))
+#         listing_data_2 = c.fetchone()
+#         display_image(listing_data_2[3], "Soft Floor Photo")
+#     c.execute("SELECT EXISTS(SELECT 1 FROM survey_images WHERE survey_id = ? AND image_type = ? LIMIT 1)", (listing_id, 'short_column_photo',))
+#     listing_data_2 = c.fetchone()
+#     if listing_data_2[0] == 1:
+#         c.execute("SELECT * FROM survey_images WHERE survey_id = ? AND image_type = ?", (listing_id, 'short_column_photo',))
+#         listing_data_2 = c.fetchone()
+#         display_image(listing_data_2[3], "Short Column Photo")
+    def review_listing(listing_id):
+        st.header(f"Reviewing Listing ID: {listing_id}")
+        
+        # Fetch the initial form data for the listing
+        c.execute("SELECT * FROM survey_data WHERE id = ?", (listing_id,))
+        listing_data = c.fetchone()
 
+        # Display the initial form data
+        st.subheader("Initial Form Data")
+
+        # Display and allow the reviewer to modify the listing data
+        latitude = st.number_input("Latitude", value=listing_data[1])
+        longitude = st.number_input("Longitude", value=listing_data[2])
+        use_type = st.selectbox("Type of Use", ["Residential", "Industrial", "Concentrated Audience", "Public Building", "Emergency Building"], index=["Residential", "Industrial", "Concentrated Audience", "Public Building", "Emergency Building"].index(listing_data[3]))
+        num_users = st.selectbox("Number of Users", ["0-10", "11-100", "100+"], index=["0-10", "11-100", "100+"].index(listing_data[4]))
+        importance_category = st.selectbox("Building Importance Category", ["Σ1", "Σ2", "Σ3", "Σ4"], index=["Σ1", "Σ2", "Σ3", "Σ4"].index(listing_data[5]))
+        
+        # Danger of non-structural element falling
+        danger_falling = st.selectbox("Danger of Non-Structural Element Falling", ["No", "Yes"], index=["No", "Yes"].index(listing_data[6]))
+        falling_photo = None
+        if danger_falling == "Yes":
+            falling_photo = st.file_uploader("Upload photo of Non-Structural Element", type=["jpg", "png", "jpeg"])
+
+        num_floors = st.number_input("Number of Floors", min_value=1, max_value=100, step=1, value=listing_data[7])
+        structure_condition = st.selectbox("Condition of Structure", ["No", "Rust/Spalling"], index=["No", "Rust/Spalling"].index(listing_data[8]))
+        rust_photo = None
+        if structure_condition == "Rust/Spalling":
+            rust_photo = st.file_uploader("Upload photo of Rust/Spalling", type=["jpg", "png", "jpeg"])
+
+        year_construction = st.number_input("Year of Construction", min_value=1800, max_value=2024, step=1, value=listing_data[9])
+        vertical_damage = st.selectbox("Previous Damages in Vertical Elements", ["No", "Yes"], index=["No", "Yes"].index(listing_data[10]))
+        damage_photo = None
+        if vertical_damage == "Yes":
+            damage_photo = st.file_uploader("Upload photo of Vertical Element Damage", type=["jpg", "png", "jpeg"])
+
+        danger_impact = st.selectbox("Danger of Impact with Neighboring Buildings", ["No", "Yes"], index=["No", "Yes"].index(listing_data[11]))
+        impact_photo = None
+        if danger_impact == "Yes":
+            impact_photo = st.file_uploader("Upload photo of Neighboring Building", type=["jpg", "png", "jpeg"])
+
+        soft_floor = st.selectbox("Soft Floor (Pilotis)", ["No", "Yes"], index=["No", "Yes"].index(listing_data[12]))
+        soft_floor_photo = None
+        if soft_floor == "Yes":
+            soft_floor_photo = st.file_uploader("Upload photo of Soft Floor (Pilotis)", type=["jpg", "png", "jpeg"])
+
+        short_column = st.selectbox("Short Column", ["No", "Yes"], index=["No", "Yes"].index(listing_data[13]))
+        short_column_photo = None
+        if short_column == "Yes":
+            short_column_photo = st.file_uploader("Upload photo of Short Column", type=["jpg", "png", "jpeg"])
+
+        # CAPTCHA implementation (optional for reviewing)
+        st.header("CAPTCHA Verification")
+        captcha_input = st.text_input("Enter CAPTCHA (type '12345')")
+        captcha_correct = captcha_input == "12345"
+
+        if st.button("Submit Changes"):
+            if captcha_correct:
+                # Update the survey_data with the modified data
+                c.execute('''UPDATE survey_data SET 
+                                latitude = ?, longitude = ?, use_type = ?, num_users = ?, importance_category = ?, 
+                                danger_falling = ?, num_floors = ?, structure_condition = ?, year_construction = ?, 
+                                vertical_damage = ?, danger_impact = ?, soft_floor = ?, short_column = ? 
+                                WHERE id = ?''',
+                          (latitude, longitude, use_type, num_users, importance_category, danger_falling, num_floors, structure_condition, year_construction,
+                           vertical_damage, danger_impact, soft_floor, short_column, listing_id))
+
+                # Process and save images if they exist
+                image_types = ["falling_photo", "rust_photo", "damage_photo", "impact_photo", "soft_floor_photo", "short_column_photo"]
+                images = [falling_photo, rust_photo, damage_photo, impact_photo, soft_floor_photo, short_column_photo]
+
+                for img_type, img in zip(image_types, images):
+                    if img is not None:
+                        resized_image = resize_image(img)
+                        c.execute('''INSERT INTO survey_images (survey_id, image_type, image)
+                                    VALUES (?, ?, ?)''', (listing_id, img_type, resized_image))
+
+                conn.commit()
+                st.success("Changes submitted successfully!")
+            else:
+                st.error("Incorrect CAPTCHA. Please try again.")
     # Additional Review Form
     st.subheader("Review Form")
 
