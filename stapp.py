@@ -271,7 +271,7 @@ def display_initial_form():
 
     # CAPTCHA implementation
     st.header("CAPTCHA Verification")
-    captcha_input = st.text_input("Enter CAPTCHA (type '12345')")
+    captcha_input = st.text_input(f"Enter {captcha_ran}")
     # captcha_correct = captcha_input == "12345"
     captcha_correct = captcha_ran
 
@@ -454,7 +454,7 @@ def review_listing(listing_id):
         c.execute("SELECT image FROM survey_images WHERE survey_id = ? AND image_type = 'rust_photo'", (listing_id,))
         rust_photo = c.fetchone()
         if rust_photo:
-            st.image(rust_photo[0], caption="Corrosion/Spalling Condition", use_container_width=True)
+            st.image(rust_photo[0], caption="Rust/Spalling Condition", use_container_width=True)
 
     year_construction = st.number_input("Year of Construction", min_value=1800, max_value=2024, step=1, value=listing_data[9])
     vertical_damage = st.selectbox("Previous Damages in Vertical Elements", ["No", "Yes"], index=["No", "Yes"].index(listing_data[10]))
