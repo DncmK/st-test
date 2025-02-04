@@ -391,76 +391,85 @@ def review_listing(listing_id):
     # Display the initial form data
     st.subheader("Initial Form Data")
 
-    # Display and allow the reviewer to modify the listing data
-    latitude = st.number_input("Latitude", value=listing_data[1])
-    longitude = st.number_input("Longitude", value=listing_data[2])
+    # Show the location on a map based on latitude and longitude
+    st.map(data=pd.DataFrame({
+        'lat': [listing_data[1]],
+        'lon': [listing_data[2]],
+    }))
+
     use_type = st.selectbox("Type of Use", ["Residential", "Industrial", "Concentrated Audience", "Public Building", "Emergency Building"], index=["Residential", "Industrial", "Concentrated Audience", "Public Building", "Emergency Building"].index(listing_data[3]))
     num_users = st.selectbox("Number of Users", ["0-10", "11-100", "100+"], index=["0-10", "11-100", "100+"].index(listing_data[4]))
     importance_category = st.selectbox("Building Importance Category", ["Σ1", "Σ2", "Σ3", "Σ4"], index=["Σ1", "Σ2", "Σ3", "Σ4"].index(listing_data[5]))
     
     # Danger of non-structural element falling
     danger_falling = st.selectbox("Danger of Non-Structural Element Falling", ["No", "Yes"], index=["No", "Yes"].index(listing_data[6]))
-    falling_photo = None
+
+    # Show the existing photo if provided for falling danger
     if danger_falling == "Yes":
-        falling_photo = st.file_uploader("Upload photo of Non-Structural Element", type=["jpg", "png", "jpeg"])
+        c.execute("SELECT image FROM survey_images WHERE survey_id = ? AND image_type = 'falling_photo'", (listing_id,))
+        falling_photo = c.fetchone()
+        if falling_photo:
+            st.image(falling_photo[0], caption="Non-Structural Element Falling", use_column_width=True)
 
     num_floors = st.number_input("Number of Floors", min_value=1, max_value=100, step=1, value=listing_data[7])
     structure_condition = st.selectbox("Condition of Structure", ["No", "Rust/Spalling"], index=["No", "Rust/Spalling"].index(listing_data[8]))
-    rust_photo = None
+
+    # Show the existing photo if provided for structure condition
     if structure_condition == "Rust/Spalling":
-        rust_photo = st.file_uploader("Upload photo of Rust/Spalling", type=["jpg", "png", "jpeg"])
+        c.execute("SELECT image FROM survey_images WHERE survey_id = ? AND image_type = 'rust_photo'", (listing_id,))
+        rust_photo = c.fetchone()
+        if rust_photo:
+            st.image(rust_photo[0], caption="Rust/Spalling Condition", use_column_width=True)
 
     year_construction = st.number_input("Year of Construction", min_value=1800, max_value=2024, step=1, value=listing_data[9])
     vertical_damage = st.selectbox("Previous Damages in Vertical Elements", ["No", "Yes"], index=["No", "Yes"].index(listing_data[10]))
-    damage_photo = None
+
+    # Show the existing photo if provided for vertical damage
     if vertical_damage == "Yes":
-        damage_photo = st.file_uploader("Upload photo of Vertical Element Damage", type=["jpg", "png", "jpeg"])
+        c.execute("SELECT image FROM survey_images WHERE survey_id = ? AND image_type = 'damage_photo'", (listing_id,))
+        damage_photo = c.fetchone()
+        if damage_photo:
+            st.image(damage_photo[0], caption="Vertical Element Damage", use_column_width=True)
 
     danger_impact = st.selectbox("Danger of Impact with Neighboring Buildings", ["No", "Yes"], index=["No", "Yes"].index(listing_data[11]))
-    impact_photo = None
+
+    # Show the existing photo if provided for impact with neighboring buildings
     if danger_impact == "Yes":
-        impact_photo = st.file_uploader("Upload photo of Neighboring Building", type=["jpg", "png", "jpeg"])
+        c.execute("SELECT image FROM survey_images WHERE survey_id = ? AND image_type = 'impact_photo'", (listing_id,))
+        impact_photo = c.fetchone()
+        if impact_photo:
+            st.image(impact_photo[0], caption="Impact with Neighboring Building", use_column_width=True)
 
     soft_floor = st.selectbox("Soft Floor (Pilotis)", ["No", "Yes"], index=["No", "Yes"].index(listing_data[12]))
-    soft_floor_photo = None
+
+    # Show the existing photo if provided for soft floor
     if soft_floor == "Yes":
-        soft_floor_photo = st.file_uploader("Upload photo of Soft Floor (Pilotis)", type=["jpg", "png", "jpeg"])
+        c.execute("SELECT image FROM survey_images WHERE survey_id = ? AND image_type = 'soft_floor_photo'", (listing_id,))
+        soft_floor_photo = c.fetchone()
+        if soft_floor_photo:
+            st.image(soft_floor_photo[0], caption="Soft Floor (Pilotis)", use_column_width=True)
 
     short_column = st.selectbox("Short Column", ["No", "Yes"], index=["No", "Yes"].index(listing_data[13]))
-    short_column_photo = None
-    if short_column == "Yes":
-        short_column_photo = st.file_uploader("Upload photo of Short Column", type=["jpg", "png", "jpeg"])
 
-    # CAPTCHA implementation (optional for reviewing)
-    st.header("CAPTCHA Verification")
-    captcha_input = st.text_input("Enter CAPTCHA (type '12345')")
-    captcha_correct = captcha_input == "12345"
+    # Show the existing photo if provided for short column
+    if short_column == "Yes":
+        c.execute("SELECT image FROM survey_images WHERE survey_id = ? AND image_type = 'short_column_photo'", (listing_id,))
+        short_column_photo = c.fetchone()
+        if short_column_photo:
+            st.image(short_column_photo[0], caption="Short Column", use_column_width=True)
 
     if st.button("Submit Changes"):
-        if captcha_correct:
-            # Update the survey_data with the modified data
-            c.execute('''UPDATE survey_data SET 
-                            latitude = ?, longitude = ?, use_type = ?, num_users = ?, importance_category = ?, 
-                            danger_falling = ?, num_floors = ?, structure_condition = ?, year_construction = ?, 
-                            vertical_damage = ?, danger_impact = ?, soft_floor = ?, short_column = ? 
-                            WHERE id = ?''',
-                      (latitude, longitude, use_type, num_users, importance_category, danger_falling, num_floors, structure_condition, year_construction,
-                       vertical_damage, danger_impact, soft_floor, short_column, listing_id))
+        # Update the survey_data with the modified data
+        c.execute('''UPDATE survey_data SET 
+                        use_type = ?, num_users = ?, importance_category = ?, danger_falling = ?, num_floors = ?, 
+                        structure_condition = ?, year_construction = ?, vertical_damage = ?, danger_impact = ?, 
+                        soft_floor = ?, short_column = ? WHERE id = ?''',
+                  (use_type, num_users, importance_category, danger_falling, num_floors, structure_condition, year_construction,
+                   vertical_damage, danger_impact, soft_floor, short_column, listing_id))
 
-            # Process and save images if they exist
-            image_types = ["falling_photo", "rust_photo", "damage_photo", "impact_photo", "soft_floor_photo", "short_column_photo"]
-            images = [falling_photo, rust_photo, damage_photo, impact_photo, soft_floor_photo, short_column_photo]
+        conn.commit()
+        st.success("Changes submitted successfully!")
 
-            for img_type, img in zip(image_types, images):
-                if img is not None:
-                    resized_image = resize_image(img)
-                    c.execute('''INSERT INTO survey_images (survey_id, image_type, image)
-                                VALUES (?, ?, ?)''', (listing_id, img_type, resized_image))
-
-            conn.commit()
-            st.success("Changes submitted successfully!")
-        else:
-            st.error("Incorrect CAPTCHA. Please try again.")
     # Additional Review Form
     st.subheader("Review Form")
 
