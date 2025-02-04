@@ -418,7 +418,7 @@ def review_listing(listing_id):
     st.write("**Location:**", f"Latitude: {latitude}, Longitude: {longitude}")
     m = folium.Map(location=[latitude, longitude], zoom_start=16)
     folium.Marker([latitude, longitude], popup="Building Location").add_to(m)
-    st_folium(m, width=700)
+    st_folium(m, width=700, height=250)
 
     # # Show the location on a map based on latitude and longitude
     # st.map(data=pd.DataFrame({
